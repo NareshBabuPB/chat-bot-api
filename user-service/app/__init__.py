@@ -1,10 +1,15 @@
 from flask import Flask
+from flask_pymongo import PyMongo
+
+mongo = PyMongo()
 
 def create_app():
     app = Flask(__name__)
 
-    from .api import api as api_blueprint
+    # Setup DB connection
+    mongo.init_app(app, "mongodb://localhost:27017/chat-db")
 
-    app.register_blueprint(api_blueprint)
+    from . import api
+    app.register_blueprint(api.bp)
 
     return app
